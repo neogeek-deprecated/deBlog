@@ -71,19 +71,29 @@ if (!class_exists('deBlog')) {
 		
 		public function Title () {
 			
-			$string = $this->dom->getElementsByTagName('h1')->item(0)->nodeValue;
+			$h1_tag = $this->dom->query('//*[@id="content"]//h1')->item(0);
 			
-			$title = $this->dom->query('//title')->item(0);
+			$title_tag = $this->dom->getElementsByTagName('title')->item(0);
 			
-			$title->nodeValue = htmlentities($string) . ' - ' . $title->nodeValue;
+			if ($title_tag && $h1_tag) {
+				
+				$title_tag->nodeValue = htmlentities($h1_tag->nodeValue) . ' - ' . $title_tag->nodeValue;
+				
+			}
 			
 		}
 		
 		public function Description () {
 			
-			$string = $this->dom->getElementsByTagName('p')->item(0)->nodeValue;
+			$p_tag = $this->dom->query('//*[@id="content"]//p')->item(0);
 			
-			$this->dom->query('//meta[@name="description"]')->item(0)->setAttribute('content', htmlentities($string));
+			$meta_tag = $this->dom->query('//meta[@name="description"]')->item(0);
+			
+			if ($meta_tag && $p_tag) {
+				
+				$meta_tag->setAttribute('content', htmlentities($p_tag->nodeValue));
+				
+			}
 			
 		}
 		
@@ -93,7 +103,13 @@ if (!class_exists('deBlog')) {
 			
 			$url = strtolower($protocol[0]) . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['PATH_INFO'];
 			
-			$this->dom->query('//link[@rel="canonical"]')->item(0)->setAttribute('href', $url);
+			$link_tag = $this->dom->query('//link[@rel="canonical"]')->item(0);
+			
+			if ($link_tag) {
+				
+				$link_tag->setAttribute('href', $url);
+				
+			}
 			
 			return $url;
 			
