@@ -21,6 +21,15 @@ if (!class_exists('deBlog')) {
 			$this->cwd = getcwd();
 			
 			$this->dom = new DOM;
+			
+			if (function_exists('apc_fetch') && $html = apc_fetch('html_' . sha($_SERVER['PATH_INFO']))) {
+				
+				@$this->dom->loadHTML($html);
+				
+				return;
+				
+			}
+			
 			@$this->dom->loadHTMLFile('index.html');
 			
 			$this->dir = path_info();
@@ -54,6 +63,12 @@ if (!class_exists('deBlog')) {
 					$this->Description();
 					
 				}
+				
+			}
+			
+			if (function_exists('apc_store')) {
+				
+				apc_store('html_' . sha($_SERVER['PATH_INFO']), $this->dom->saveHTML(), 60 * 60);
 				
 			}
 			
