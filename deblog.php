@@ -10,6 +10,7 @@ if (!class_exists('deBlog')) {
 		public $dom;
 		
 		public $uid;
+		
 		public $dir;
 		public $page;
 		
@@ -19,26 +20,28 @@ if (!class_exists('deBlog')) {
 		
 		public function __construct() {
 			
-			$this->uid = 'html_' . sha($_SERVER['PATH_INFO']);
-			
 			$this->cwd = getcwd();
 			
 			$this->dom = new DOM;
 			
+			$this->uid = 'html_' . sha($_SERVER['PATH_INFO']);
+			
+			$this->dir = path_info();
+			$this->page = path_info(1);
+			
+			$this->url = $this->URL();
+			
 			if (!isset($_GET['nocache']) && function_exists('apc_fetch') && $html = apc_fetch($this->uid)) {
 				
 				@$this->dom->loadHTML($html);
+				
+				$this->content = $this->dom->getElementById('content');
 				
 				return;
 				
 			}
 			
 			@$this->dom->loadHTMLFile('index.html');
-			
-			$this->dir = path_info();
-			$this->page = path_info(1);
-			
-			$this->url = $this->URL();
 			
 			$this->content = $this->dom->getElementById('content');
 			
