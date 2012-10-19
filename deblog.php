@@ -161,6 +161,7 @@ if (!class_exists('deBlog')) {
 				
 				if (!headers_sent()) {
 					
+					header('HTTP/1.0 404 Not Found');
 					header('Content-type: text/html; charset=utf-8');
 					
 				}
