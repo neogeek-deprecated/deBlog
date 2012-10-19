@@ -155,13 +155,14 @@ if (!class_exists('deBlog')) {
 				
 				if ($this->content && !$this->content->childNodes->length) {
 					
+					header('HTTP/1.0 404 Not Found');
+					
 					$this->Import($this->cwd . '/404.html');
 					
 				}
 				
 				if (!headers_sent()) {
 					
-					header('HTTP/1.0 404 Not Found');
 					header('Content-type: text/html; charset=utf-8');
 					
 				}
